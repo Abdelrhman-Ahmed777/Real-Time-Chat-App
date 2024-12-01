@@ -14,7 +14,8 @@ fun NestedNavigationGraph(navController: NavHostController , isLoggedIn: Boolean
 
     NavHost(
         navController = navController ,
-        startDestination = if (isLoggedIn) Screen.HomeGraph.route else Screen.AuthGraph.route
+        startDestination = if (isLoggedIn) Screen.HomeGraph.route else Screen.AuthGraph.route,
+
     ) {
         home(navController = navController)
         menu(navController = navController)

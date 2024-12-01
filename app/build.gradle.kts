@@ -152,6 +152,11 @@ dependencies {
 
     // Firebase Realtime Database implementation
     implementation("com.google.firebase:firebase-database:21.0.0")
+
+    //navigation animation
+    implementation(libs.accompanist.navigation.animation)
+
+    implementation(libs.accompanist.navigation.animation.vversion)
 }
 
 

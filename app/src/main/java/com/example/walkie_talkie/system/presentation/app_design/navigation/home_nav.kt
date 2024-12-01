@@ -1,6 +1,7 @@
 package com.example.walkie_talkie.system.presentation.app_design.navigation
 
 
+import androidx.compose.animation.core.animate
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -15,7 +16,7 @@ import com.example.walkie_talkie.system.presentation.app_design.ui.screens.home.
 fun NavGraphBuilder.home(navController: NavController) {
     navigation(
         startDestination = Screen.MainScreen.route ,
-        route = Screen.HomeGraph.route
+        route = Screen.HomeGraph.route,
     ) {
         composable(Screen.MainScreen.route) {
             HomeScreen(navController)
