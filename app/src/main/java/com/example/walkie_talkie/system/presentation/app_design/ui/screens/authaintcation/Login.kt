@@ -36,9 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.example.walkie_talkie.R
-import com.example.walkie_talkie.R.drawable.email_ic
 import com.example.walkie_talkie.R.drawable.password_ic
 import com.example.walkie_talkie.system.presentation.app_design.navigation.Screen
 import com.example.walkie_talkie.system.presentation.app_design.ui.screens.authaintcation.welcome.AuthStatusBarRow
@@ -50,7 +48,12 @@ import com.example.walkie_talkie.ui_thames.theme.digital
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LoginAndSignUp(navController: NavHostController) {
+fun LoginAndSignUp(navController: NavController) {
+
+    var Email by remember { mutableStateOf("") }
+    var passwordValue by remember { mutableStateOf("") }
+
+
 
     Box(
         modifier = Modifier
@@ -103,22 +106,69 @@ fun LoginAndSignUp(navController: NavHostController) {
 
             )
 
-            EnterMessage(
+            TextField(value = Email ,
+                onValueChange = {
+                    Email = it
+                } ,
+                enabled = true ,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp , start = 16.dp)
                     .wrapContentHeight()
-                    .clip(RoundedCornerShape(15.dp))
-                    .background(darkBlue)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(50.dp))
+                    .border(
+                        width = 1.dp ,
+                        color = lightBlue ,
+                        shape = RoundedCornerShape(50.dp)
+                    )
                     .constrainAs(email) {
                         top.linkTo(text1.bottom , margin = 16.dp)
                         start.linkTo(parent.start , margin = 32.dp)
                         end.linkTo(parent.end , margin = 32.dp)
 
                     } ,
-                "Email" ,
-                email_ic ,
-            )
+
+                placeholder = {
+                    Text(text = "Email" , style = TextStyle(color = Color.Gray))
+                } ,
+                maxLines = 50 ,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = lightBlue ,
+                    unfocusedTextColor = lightBlue ,
+                    focusedContainerColor = darkBlue ,
+                    unfocusedContainerColor = darkBlue ,
+                    focusedIndicatorColor = darkBlue ,
+                    unfocusedIndicatorColor = darkBlue ,
+                    cursorColor = lightBlue
+                ) ,
+                singleLine = true ,
+
+                textStyle = TextStyle(
+                    color = Color.White ,
+                    fontSize = 20.sp ,
+                ) ,
+                leadingIcon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.email_ic) ,
+                        modifier = Modifier.clickable {
+                        } ,
+                        contentDescription = null ,
+                        tint = lightBlue ,
+                    )
+                } ,
+                trailingIcon = {
+                    if (Email.isNotEmpty()) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.close_ic) ,
+                            modifier = Modifier.clickable {
+                                Email = ""
+                            } ,
+                            contentDescription = "login" ,
+                            tint = Color.Red
+                        )
+                    }
+                })
+
 
 
             Text(
@@ -133,22 +183,67 @@ fun LoginAndSignUp(navController: NavHostController) {
                 color = lightBlue
             )
 
-            EnterMessage(
+            TextField(value = passwordValue ,
+                onValueChange = {
+                    passwordValue = it
+                } ,
+                enabled = true ,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 16.dp , start = 16.dp)
                     .wrapContentHeight()
-                    .clip(RoundedCornerShape(15.dp))
-                    .background(darkBlue)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(50.dp))
+                    .border(
+                        width = 1.dp ,
+                        color = lightBlue ,
+                        shape = RoundedCornerShape(50.dp)
+                    )
                     .constrainAs(password) {
                         top.linkTo(text2.bottom , margin = 8.dp)
                         start.linkTo(parent.start , margin = 32.dp)
                         end.linkTo(parent.end , margin = 32.dp)
 
                     } ,
-                "password" ,
-                password_ic
-            )
+                placeholder = {
+                    Text(text = "password" , style = TextStyle(color = Color.Gray))
+                } ,
+                maxLines = 50 ,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = lightBlue ,
+                    unfocusedTextColor = lightBlue ,
+                    focusedContainerColor = darkBlue ,
+                    unfocusedContainerColor = darkBlue ,
+                    focusedIndicatorColor = darkBlue ,
+                    unfocusedIndicatorColor = darkBlue ,
+                    cursorColor = lightBlue
+                ) ,
+                singleLine = true ,
+
+                textStyle = TextStyle(
+                    color = Color.White ,
+                    fontSize = 20.sp ,
+                ) ,
+                leadingIcon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = password_ic) ,
+                        modifier = Modifier.clickable {
+                        } ,
+                        contentDescription = null ,
+                        tint = lightBlue ,
+                    )
+                } ,
+                trailingIcon = {
+                    if (passwordValue.isNotEmpty()) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.close_ic) ,
+                            modifier = Modifier.clickable {
+                                passwordValue = ""
+                            } ,
+                            contentDescription = "login" ,
+                            tint = Color.Red
+                        )
+                    }
+                })
 
 
 
@@ -271,14 +366,13 @@ fun EnterMessage(
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.close_ic) ,
                     modifier = Modifier.clickable {
+                        text = ""
                     } ,
                     contentDescription = "login" ,
                     tint = Color.Red
                 )
             }
-
-        }
-    )
+        })
 }
 
 

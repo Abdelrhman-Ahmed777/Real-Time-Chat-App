@@ -9,29 +9,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.walkie_talkie.R
 import com.example.walkie_talkie.R.drawable.auth_bank_ic
-import com.example.walkie_talkie.presentation.screens.screens.authaintcation.DotIndicator
 import com.example.walkie_talkie.theme.darkBlue
 import com.example.walkie_talkie.theme.lightBlue
-import com.example.walkie_talkie.theme.powder
 import com.example.walkie_talkie.ui_thames.theme.digital
 
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun WelcomeScreen3(index: MutableState<Int> , incrment: () -> Int) {
+fun WelcomeScreen3() {
     Box(
         modifier = Modifier
             .width(398.dp)
@@ -51,11 +46,12 @@ fun WelcomeScreen3(index: MutableState<Int> , incrment: () -> Int) {
                 modifier = Modifier.constrainAs(statusBar) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    top.linkTo(parent.top , margin = 8.dp)
-                }, darkBlue)
+                    top.linkTo(parent.top , margin = 24.dp)
+                } , darkBlue
+            )
 
             Text(
-                text = "Welcome \n \t \t to " ,
+                text = "Welcome \n \n\t \t to " ,
                 modifier = Modifier
                     .constrainAs(title1) {
                         top.linkTo(parent.top , margin = 74.dp)
@@ -117,41 +113,8 @@ fun WelcomeScreen3(index: MutableState<Int> , incrment: () -> Int) {
                 fontFamily = digital ,
                 color = lightBlue
             )
-            Button(
-                onClick = { incrment() } ,
-                modifier = Modifier
-                    .width(102.dp)
-                    .height(54.dp)
-                    .constrainAs(button) {
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        top.linkTo(text2.bottom , margin = 24.dp)
-                    } ,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = powder ,
-                )
-            ) {
-                Text(
-                    text = "Next" ,
-                    fontSize = 27.sp ,
-                    fontFamily = digital ,
-                    color = lightBlue
-                )
-            }
-            DotIndicator(
-                totalDots = 4 ,
-                selectedIndex = 0 ,
-                selectedColor = lightBlue ,
-                unselectedColor = Color.Gray ,
-                dotSize = 8.dp ,
-                dotSpacing = 40.dp ,
-                modifier = Modifier
-                    .constrainAs(indicator) {
-                        top.linkTo(button.bottom , margin = 32.dp)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    } ,
-            )
+
+
         }
     }
 }
