@@ -1,5 +1,9 @@
 package com.example.walkie_talkie.system.presentation.app_design.ui.screens.authaintcation.singin
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import coil.compose.rememberAsyncImagePainter
 import com.example.walkie_talkie.R
 import com.example.walkie_talkie.R.drawable.acount_name_ic
 import com.example.walkie_talkie.R.drawable.male_profile
@@ -46,12 +51,16 @@ import com.example.walkie_talkie.ui_thames.theme.digital
 
 @Preview
 @Composable
-fun SignInScreen3() {
+fun SignInScreen2() {
 
 
     var isMale by remember { mutableStateOf(false) }
     var isFemale by remember { mutableStateOf(false) }
-
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val imagePeckerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia() ,
+        onResult = { uri: Uri? -> selectedImageUri = uri }
+    )
 
 
     ConstraintLayout(
@@ -150,7 +159,8 @@ fun SignInScreen3() {
                     .size(100.dp)
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .clickable {
+                    .clickable
+                    {
                         isMale = false
                         isFemale = true
                         //     isMaleValue(isMale)
@@ -186,19 +196,30 @@ fun SignInScreen3() {
 
 
         Image(
-            painter = painterResource(id = if (isMale) male_profile else R.drawable.female) ,
+            painter =
+            if (selectedImageUri != null) {
+                rememberAsyncImagePainter(selectedImageUri)
+            } else {
+                painterResource(id = if (isMale) male_profile else R.drawable.female)
+            } ,
             contentDescription = null ,
             modifier = Modifier
                 .size(150.dp)
                 .clip(CircleShape)
                 .constrainAs(image) {
-                    top.linkTo(male.bottom , margin = 32.dp)
+                    top.linkTo(male.bottom , margin = 16.dp)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 } , contentScale = ContentScale.Crop
         )
+
+
         IconButton(
-            onClick = { /*TODO*/ } ,
+            onClick = {
+                imagePeckerLauncher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
+            } ,
             modifier = Modifier
                 .size(40.dp)
                 .constrainAs(button) {

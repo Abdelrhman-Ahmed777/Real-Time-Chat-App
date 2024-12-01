@@ -2,16 +2,16 @@ package com.example.walkie_talkie.system.presentation.app_design.ui.screens.auth
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -43,13 +43,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun WelcomeMainFun(navController: NavController) {
 
-    val pageState = rememberPagerState { 4 }
+    val pageState = rememberPagerState(
+        initialPage = 0 ,
+        pageCount = { 4 })
+    val smootherAnimSpec = tween<Float>(durationMillis = 500)
     val index = remember { mutableIntStateOf(pageState.currentPage) }
     val coroutineScope = rememberCoroutineScope()
     val increment: () -> Unit = {
         ((index.intValue + 1) % 4).also { index.intValue = it }
         coroutineScope.launch {
-            pageState.run { animateScrollToPage(index.intValue) }
+            pageState.run { animateScrollToPage(index.intValue , animationSpec = smootherAnimSpec) }
         }
     }
     LaunchedEffect(pageState.currentPage , pageState.isScrollInProgress) {
@@ -81,39 +84,35 @@ fun WelcomeMainFun(navController: NavController) {
         )
 
 
-        Box(
+
+        HorizontalPager(
+            state = pageState ,
+            flingBehavior = PagerDefaults.flingBehavior(
+                state = pageState ,
+                pagerSnapDistance = PagerSnapDistance.atMost(4)
+            ) ,
             modifier = Modifier
-                .fillMaxWidth()
                 .wrapContentWidth()
-                .clip(shape = RoundedCornerShape(24.dp))
+                .height(658.dp)
+                .padding(horizontal = 16.dp)
                 .constrainAs(pages) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    top.linkTo(statusBar.top)
-                    bottom.linkTo(parent.bottom)
+                    top.linkTo(statusBar.bottom , margin = 32.dp)
                 }
-        ) {
-            Box(
-                modifier = Modifier
-                   .clip(shape = RoundedCornerShape(20.dp))
-            ){
-                HorizontalPager(
-                    state = pageState ,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(shape = RoundedCornerShape(24.dp))
-                    ,contentPadding = PaddingValues(16.dp)
-                ) {
-                    when (pageState.currentPage) {
-                        0 -> WelcomeScreen1()
-                        1 -> WelcomeScreen2()
-                        2 -> WelcomeScreen3()
-                        3 -> WelcomeScreen4()
-                    }
-                }
-            }
+                .clip(shape = RoundedCornerShape(24.dp))
 
+        ) {
+            when (it) {
+                0 -> WelcomeScreen1()
+                1 -> WelcomeScreen2()
+                2 -> WelcomeScreen3()
+                3 -> WelcomeScreen4()
+            }
         }
+
+
+
 
         DotIndicator(
             totalDots = 4 ,

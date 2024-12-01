@@ -2,10 +2,9 @@ package com.example.walkie_talkie.system.presentation.app_design.ui.screens.auth
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -57,9 +56,7 @@ fun SignInScreen1(
 
 
     ConstraintLayout(
-        modifier = Modifier
-            .width(350.dp)
-            .height(550.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         val (enterPhone , enterEmail , phone , password , email , text2 , reWrite , reWritePass) = createRefs()
 

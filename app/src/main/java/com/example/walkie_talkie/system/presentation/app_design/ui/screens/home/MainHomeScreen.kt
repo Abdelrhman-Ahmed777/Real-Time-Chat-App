@@ -1,6 +1,7 @@
 package com.example.walkie_talkie.system.presentation.app_design.ui.screens.home
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -78,6 +81,26 @@ fun HomeScreen(navController: NavController) {
     val bottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true) // Bottom sheet state
     var showBottomSheet by remember { mutableStateOf(false) } //
+
+    var selectedTabIndex by remember {
+        mutableIntStateOf(0)
+    }
+    val smootherAnimSpec = tween<Float>(durationMillis = 500)
+
+    val pageState = rememberPagerState(
+        initialPage = 0 , pageCount = { 3 })
+    LaunchedEffect(selectedTabIndex) {
+        if (pageState.currentPage != selectedTabIndex) {
+            pageState.animateScrollToPage(selectedTabIndex)
+        }
+    }
+    LaunchedEffect(pageState.currentPage , pageState.isScrollInProgress) {
+        if (!pageState.isScrollInProgress) {
+            selectedTabIndex = pageState.currentPage
+        }
+    }
+
+
 
 
     ModalNavigationDrawer(
@@ -320,20 +343,7 @@ fun HomeScreen(navController: NavController) {
             )
         )
 
-        var selectedTabIndex by remember {
-            mutableIntStateOf(0)
-        }
-        val pageState = rememberPagerState { 3 }
-        LaunchedEffect(selectedTabIndex) {
-            if (pageState.currentPage != selectedTabIndex) {
-                pageState.animateScrollToPage(selectedTabIndex)
-            }
-        }
-        LaunchedEffect(pageState.currentPage , pageState.isScrollInProgress) {
-            if (!pageState.isScrollInProgress) {
-                selectedTabIndex = pageState.currentPage
-            }
-        }
+
         Scaffold(
             modifier = Modifier
                 .fillMaxSize() ,
@@ -367,6 +377,10 @@ fun HomeScreen(navController: NavController) {
                 ) {
                     HorizontalPager(
                         state = pageState ,
+                        flingBehavior = PagerDefaults.flingBehavior(
+                            state = pageState ,
+                            pagerSnapDistance = PagerSnapDistance.atMost(3)
+                        ) ,
                         modifier = Modifier
                             .weight(1f)
                             .background(background)
@@ -379,7 +393,6 @@ fun HomeScreen(navController: NavController) {
                     }
                     if (showBottomSheet) {
                         LaunchedEffect(Unit) {
-
                             bottomSheetState.show()
                         }
                         BottomSheet(

@@ -4,15 +4,19 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerSnapDistance
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -63,28 +67,42 @@ fun SignIn(navController: NavController) {
     var phoneNumber by remember { mutableStateOf("") }
     var isMale by remember { mutableStateOf(false) }
     var isFemale by remember { mutableStateOf(false) }
-
-
-    val pageState = rememberPagerState { 2 }
+    val pageState = rememberPagerState(
+        initialPage = 0 ,
+        pageCount = { 2 }
+    )
+    val smootherAnimSpec = tween<Float>(durationMillis = 500)
     var index by remember { mutableIntStateOf(pageState.currentPage) }
     val coroutineScope = rememberCoroutineScope()
     val increment: () -> Unit = {
-        ((index + 1) % 3).also { index = it }
-        coroutineScope.launch {
-            pageState.run { animateScrollToPage(index , animationSpec = spring()) }
+        coroutineScope.launch(Dispatchers.IO) {
+            ((index + 1) % 3).also { index = it }
+            pageState.run { animateScrollToPage(index , animationSpec = smootherAnimSpec) }
         }
     }
     val decrement: () -> Unit = {
-        ((index - 1) % 3).also { index = it }
-        coroutineScope.launch {
-            pageState.run { animateScrollToPage(index , animationSpec = spring()) }
+        coroutineScope.launch(Dispatchers.IO) {
+            ((index - 1) % 3).also { index = it }
+            pageState.run { animateScrollToPage(index , animationSpec = smootherAnimSpec) }
         }
     }
+
     LaunchedEffect(pageState.currentPage , pageState.isScrollInProgress) {
         if (!pageState.isScrollInProgress) {
             pageState.run { animateScrollToPage(index , animationSpec = spring()) }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     ConstraintLayout(
@@ -96,7 +114,6 @@ fun SignIn(navController: NavController) {
         val (back , statusBar , dots , title , screens , nextButton , prevButton) = createRefs()
 
         AuthStatusBarRow(
-
             modifier = Modifier.constrainAs(statusBar) {
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
@@ -117,7 +134,7 @@ fun SignIn(navController: NavController) {
                 .size(40.dp)
                 .constrainAs(back) {
                     start.linkTo(parent.start , margin = 24.dp)
-                    top.linkTo(parent.top , margin = 70.dp)
+                    top.linkTo(statusBar.bottom , margin = 24.dp)
                 }
         )
 
@@ -125,7 +142,7 @@ fun SignIn(navController: NavController) {
             text = "sing in" ,
             modifier = Modifier
                 .constrainAs(title) {
-                    top.linkTo(parent.top , margin = 64.dp)
+                    top.linkTo(statusBar.bottom , margin = 16.dp)
                     start.linkTo(back.end , margin = 16.dp)
                 } ,
             fontSize = 50.sp ,
@@ -138,22 +155,27 @@ fun SignIn(navController: NavController) {
         HorizontalPager(
             state = pageState ,
             contentPadding = PaddingValues(8.dp) ,
+            flingBehavior = PagerDefaults.flingBehavior(
+                state = pageState ,
+                pagerSnapDistance = PagerSnapDistance.atMost(2)
+            ) ,
             modifier = Modifier
                 .constrainAs(screens) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                    top.linkTo(title.bottom , 24.dp)
+                    top.linkTo(title.bottom , 8.dp)
                 }
                 .fillMaxWidth()
+                .height(550.dp)
                 .padding(horizontal = 16.dp)
-        ) {
-            when (pageState.currentPage) {
+        ) { it ->
+            when (it) {
                 0 -> SignInScreen1(setEmailValue = { email = it } ,
                     setPhoneNumberValue = { phoneNumber = it } ,
                     setPasswordValue = { password = it } ,
                     setReWritePassword = { password = it })
 
-                1 -> SignInScreen3()
+                1 -> SignInScreen2()
             }
         }
 
