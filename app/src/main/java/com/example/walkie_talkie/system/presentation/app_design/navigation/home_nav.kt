@@ -1,7 +1,8 @@
 package com.example.walkie_talkie.system.presentation.app_design.navigation
 
 
-import androidx.compose.animation.core.animate
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -16,12 +17,35 @@ import com.example.walkie_talkie.system.presentation.app_design.ui.screens.home.
 fun NavGraphBuilder.home(navController: NavController) {
     navigation(
         startDestination = Screen.MainScreen.route ,
-        route = Screen.HomeGraph.route,
+        route = Screen.HomeGraph.route ,
     ) {
-        composable(Screen.MainScreen.route) {
+        composable(Screen.MainScreen.route
+        , enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right ,
+                animationSpec = tween(1500),
+                initialOffset = { it }
+            )
+        }
+            , exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left ,
+                    animationSpec = tween(1500)
+                )
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left ,
+                    animationSpec = tween(1500)
+                )
+            }
+        ) {
             HomeScreen(navController)
         }
-        composable(Screen.Chats.route) {
+        composable(
+            Screen.Chats.route
+
+        ) {
             ChatsScreen(navController)
         }
         composable(Screen.Status.route) {

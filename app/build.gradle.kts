@@ -155,7 +155,7 @@ dependencies {
 
     //navigation animation
     implementation(libs.accompanist.navigation.animation)
-
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.31.5-beta")
     implementation(libs.accompanist.navigation.animation.vversion)
 }
 
