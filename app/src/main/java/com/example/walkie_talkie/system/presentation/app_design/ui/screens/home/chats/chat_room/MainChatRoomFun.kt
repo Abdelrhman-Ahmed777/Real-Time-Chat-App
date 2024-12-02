@@ -37,11 +37,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.example.walkie_talkie.R
 import com.example.walkie_talkie.R.drawable.emoji
 import com.example.walkie_talkie.R.drawable.mic_ic
@@ -52,9 +51,8 @@ import com.example.walkie_talkie.theme.darkBlue2
 import com.example.walkie_talkie.theme.lightBlue
 
 
-@Preview(showBackground = true)
 @Composable
-fun MainChatRoomFun() {
+fun MainChatRoomFun(navController: NavController) {
 
     Scaffold(
         modifier = Modifier
@@ -62,11 +60,9 @@ fun MainChatRoomFun() {
             .windowInsetsPadding(WindowInsets.ime) ,
         topBar = {
             Surface(
-                modifier = Modifier
-                    .background(darkBlue2) ,
+                modifier = Modifier,
                 shape = RoundedCornerShape(bottomStart = 50.dp , bottomEnd = 50.dp)
             ) {
-                val navController = rememberNavController()
                 ChatWikiTokiScreen(navController)
             }
         } ,

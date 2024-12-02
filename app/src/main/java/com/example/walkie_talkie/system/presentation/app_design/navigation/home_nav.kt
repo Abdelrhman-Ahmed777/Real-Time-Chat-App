@@ -11,6 +11,7 @@ import com.example.walkie_talkie.system.presentation.app_design.ui.componant.err
 import com.example.walkie_talkie.system.presentation.app_design.ui.screens.home.HomeScreen
 import com.example.walkie_talkie.system.presentation.app_design.ui.screens.home.channels.ChannelsScreen
 import com.example.walkie_talkie.system.presentation.app_design.ui.screens.home.chats.ChatsScreen
+import com.example.walkie_talkie.system.presentation.app_design.ui.screens.home.chats.chat_room.MainChatRoomFun
 import com.example.walkie_talkie.system.presentation.app_design.ui.screens.home.status.StatusScreen
 
 
@@ -46,7 +47,7 @@ fun NavGraphBuilder.home(navController: NavController) {
             Screen.Chats.route
 
         ) {
-            ChatsScreen(navController)
+            MainChatRoomFun(navController)
         }
         composable(Screen.Status.route) {
             StatusScreen(navController)

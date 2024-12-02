@@ -70,7 +70,7 @@ fun MainAiChat(navController: NavController) {
                     .fillMaxWidth() ,
                shape = RoundedCornerShape(bottomStart = 30.dp , bottomEnd = 30.dp)
             ) {
-                ChatWikiTokiScreen(navController = navController)
+                AiChatWikiTokiScreen(navController = navController)
             }
         } ,
         content = { paddingValues ->
